@@ -136,9 +136,9 @@ Interface (HWI)][hwi repo], [Rust Bitcoin][rust bitcoin repo], [BTCPay
 Server][btcpay server repo], [BDK][bdk repo], [Bitcoin Improvement
 Proposals (BIPs)][bips repo], and [Lightning BOLTs][bolts repo].*
 
-- [Bitcoin Core #24836][] adds a regtest-only RPC, `submitpackage` to
+- [Bitcoin Core #24836][] adds a regtest-only RPC, `submitpackage`, to
   help L2 protocol and application developers who intend to use
-  package relay in the future test their transactions against the
+  [package relay][topic package relay] in the future test their transactions against the
   Bitcoin Core default package policy.  The current policy is outlined
   [here][packages doc]. This RPC can also be used to test future
   additions and changes, such as the proposed package RBF rules.
