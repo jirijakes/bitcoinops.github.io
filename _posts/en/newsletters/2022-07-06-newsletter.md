@@ -122,7 +122,12 @@ Interface (HWI)][hwi repo], [Rust Bitcoin][rust bitcoin repo], [BTCPay
 Server][btcpay server repo], [BDK][bdk repo], [Bitcoin Improvement
 Proposals (BIPs)][bips repo], and [Lightning BOLTs][bolts repo].*
 
-- [Bitcoin Core #24836][] add RPC (-regtest only) for testing package policy FIXME:glozow
+- [Bitcoin Core #24836][] adds a regtest-only RPC, `submitpackage` to
+  help L2 protocol and application developers who intend to use
+  package relay in the future test their transactions against the
+  Bitcoin Core default package policy.  The current policy is outlined
+  [here][packages doc]. This RPC can also be used to test future
+  additions and changes, such as the proposed package RBF rules.
 
 - [Bitcoin Core #22558][] psbt: Taproot fields for PSBT FIXME:bitschmidty
 
@@ -184,3 +189,4 @@ Proposals (BIPs)][bips repo], and [Lightning BOLTs][bolts repo].*
 [osuntokun onion pay]: https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-June/003631.html
 [news190 onion pay]: /en/newsletters/2022/03/09/#paying-for-onion-messages
 [2022 stealth addresses]: https://gist.github.com/RobinLinus/4e7467abaf0a0f8a521d5b512dca4833
+[packages doc]: https://github.com/bitcoin/bitcoin/blob/09f32cffa6c3e8b2d77281a5983ffe8f482a5945/doc/policy/packages.md
