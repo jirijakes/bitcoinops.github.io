@@ -7,7 +7,13 @@ type: newsletter
 layout: newsletter
 lang: en
 ---
-This week's newsletter FIXME:harding
+This week's newsletter summarizes discussions about long-term
+block reward funding, alternatives to BIP47 reusable payment
+codes, options for announcing LN channel splices, LN routing fee
+collection strategies, and onion message rate limiting.  Also included
+are our regular sections with announcements of new software releases and
+release candidates, plus summaries of notable changes to popular Bitcoin
+infrastructure software.
 
 ## News
 
@@ -21,7 +27,7 @@ This week's newsletter FIXME:harding
   removed if the Bitcoin protocol were modified to include a perpetual
   subsidy.  Several respondents indicated that they thought the system
   is better off without a perpetual subsidy, while others looked for
-  alternatives or apparent equivalencies such as demurrage.
+  alternatives or apparent equivalencies such as [demurrage][].
 
     As of this writing, the thread appears to consist of casual
     conversation rather than advocacy for any particular proposal to
@@ -32,17 +38,25 @@ This week's newsletter FIXME:harding
   list a proposal for an alternative to [BIP47][] that attempts to
   address some of the issues found during its use in production.  BIP47
   allows Alice to publish a payment code that anyone can use in
-  combination with their own keys to create private addresses for Alice
-  that only they and Alice will know, allowing anyone to reuse the
-  public payment code without engaging in privacy-harming [address
-  reuse][topic output linking].  One of the problems with BIP47 is that
-  the first transaction between a spender (e.g. Bob) and Alice may leak
-  to block chain analysis organizations that Bob wants to pay Alice.
+  combination with their own keys to create an unlimited number of
+  private addresses for Alice that only they and Alice will know belong
+  to her, avoiding the worst problems of [address reuse][topic output
+  linking].
+
+    However, one of the problems with BIP47 is that the first
+    transaction from spender Bob to receiver Alice is a *notification
+    transaction* that uses a special address associated with the payment
+    code.  This definitely leaks to third parties who know Alice's
+    payment code that someone is planning to start paying her.  If Bob's
+    wallet isn't carefully designed to segregate funds used for
+    notification transactions, the transaction may also leak that Bob is
+    planning to pay Alice---reducing or possibly even eliminating the
+    benefits of BIP47.
 
     Hodler's scheme would be less likely to leak this information but it
     would increase the amount of data a client implementing the protocol
     would need to learn from the block chain, making it less suitable
-    for light clients.  Ruben Somsen suggested several alternatives
+    for light clients.  Ruben Somsen indicated several alternatives
     that could also be investigated, including Somsen's silent
     payments idea (see [Newsletter #194][news194 silent payments]),
     Robin Linus's [2022 stealth addresses][] idea, and [previous
@@ -58,7 +72,7 @@ This week's newsletter FIXME:harding
 
     One proposal was for nodes to simply not consider a channel closed
     until some amount of time after its onchain closing transaction was
-    seen.  This would give time for he announcement of the new
+    seen.  This would give time for the announcement of the new
     (post-splice) channel to propagate.  In the interim, nodes would
     still attempt to route payments through the seemingly-closed
     channel, as a spliced channel would still be able to forward
@@ -82,18 +96,18 @@ This week's newsletter FIXME:harding
   which also received significant [additional commentary][towns fee
   signal] in the past week from Anthony Towns.
 
-- **Onion message rate limiting:** Bastian Teinturier
+- **Onion message rate limiting:** Bastien Teinturier
   [posted][teinturier rate limit] a summary of an idea he attributes to
   Rusty Russell for rate limiting [onion messages][topic onion
   messages].  The proposal has each node store just an extra 32 bytes of
   information for each of their peers that allows them to
-  probabalistically punish peers who send too much traffic.  The
-  suggested penalty is to just half the rate limit for a peer relaying
+  Probabilistically punish peers who send too much traffic.  The
+  suggested penalty is to just halve the rate limit for a peer relaying
   too much traffic for about 30 seconds.  It's acceptable if this
   lightweight penalty is occasionally enforced against the wrong peer,
   as may happen with this idea.  The proposal also allows the originator
   of a message to learn which downstream nodes are rate limiting their
-  messages (again probabalistically), giving them a chance to resend the
+  messages (again probabilistically), giving them a chance to resend the
   message by a different route.
 
     Olaoluwa Osuntokun [suggested][osuntokun onion pay] reconsideration
@@ -109,9 +123,9 @@ This week's newsletter FIXME:harding
 projects.  Please consider upgrading to new releases or helping to test
 release candidates.*
 
-FIXME:harding to update Tuesday
-
-- LDK
+- [LDK 0.0.109][] is a new release of this LN node library, which
+  includes both of the new features described for LDK in the *notable
+  changes* section below.
 
 ## Notable code and documentation changes
 
@@ -144,10 +158,10 @@ Proposals (BIPs)][bips repo], and [Lightning BOLTs][bolts repo].*
   settle).  If a set of payments up to the total amount of a channel can
   be sent, then a prober can learn nearly the exact balance of the
   channel by just trying different sets of payments until all parts are
-  accepted.  But, if the set of payments which can be sent is limited to
+  accepted.  However, if the set of payments which can be sent is limited to
   half the channel balance, it's harder for the prober to determine
   whether payments are being rejected because of a lack of funds on one
-  side of the channel or because of the advertised limit (the
+  side of the channel or because of the self-imposed limit (the
   `max_htlc_in_flight` limit).
 
 - [LDK #1550][] provides the ability for users to add a list of nodes to
@@ -157,13 +171,13 @@ Proposals (BIPs)][bips repo], and [Lightning BOLTs][bolts repo].*
 - [LND #6592][] adds a new `requiredreserve` RPC to the wallet subserver
   that prints the number of satoshis the wallet is reserving in UTXOs it
   unilaterally controls to fee bump [anchor outputs][topic anchor
-  outputs] if necessary.  An additional `--additionalChannels` parameter
-  to the RPC, which takes a integer argument, reports the number of
+  outputs] if necessary.  An additional `--additionalChannels` RPC
+  parameter, which takes an integer argument, reports the number of
   satoshis the wallet will reserve if that number of additional channels
   are opened.
 
 - [Rust Bitcoin #1024][] adds additional code for helping developers
-  work around the `SIGHASH_SINGLE` "bug" where the Bitcoin protocol
+  work around the [`SIGHASH_SINGLE` "bug"][shs1] where the Bitcoin protocol
   expects a value of `1` to be signed when the input containing the
   `SIGHASH_SINGLE` signature has an index number higher than the index
   number of any output in the transaction.
@@ -177,6 +191,7 @@ Proposals (BIPs)][bips repo], and [Lightning BOLTs][bolts repo].*
 
 {% include references.md %}
 {% include linkers/issues.md v=2 issues="24836,22558,5281,1555,1550,1024,3709,611,1004,6592" %}
+[ldk 0.0.109]: https://github.com/lightningdevkit/rust-lightning/releases/tag/v0.0.109
 [lnurl withdraw]: https://github.com/fiatjaf/lnurl-rfc/blob/luds/03.md
 [todd subsidy]: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-June/020551.html
 [hodler new codes]: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-June/020605.html
@@ -192,3 +207,5 @@ Proposals (BIPs)][bips repo], and [Lightning BOLTs][bolts repo].*
 [2022 stealth addresses]: https://gist.github.com/RobinLinus/4e7467abaf0a0f8a521d5b512dca4833
 [packages doc]: https://github.com/bitcoin/bitcoin/blob/09f32cffa6c3e8b2d77281a5983ffe8f482a5945/doc/policy/packages.md
 [news155 psbt extensions]: /en/newsletters/2021/06/30/#psbt-extensions-for-taproot
+[demurrage]: https://en.wikipedia.org/wiki/Demurrage_%28currency%29
+[shs1]: https://www.coinspect.com/capture-coins-challenge-1-sighashsingle/
