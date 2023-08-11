@@ -5,8 +5,8 @@ The first [MuSig paper][] was published in 2018, and the potential of
 [MuSig][topic musig] on
 Bitcoin was one of the selling points used to gain support for the taproot soft
 fork. Work on MuSig continued with the publication of [MuSig-DN][] and [MuSig2][] in 2020.
-When taproot neared activation on Bitcoin’s mainnet in 2021, excitement
-about bringing MuSig signing to Bitcoin users was palpable. At BitGo, we were
+When taproot neared activation on bitcoin’s mainnet in 2021, excitement
+about bringing MuSig signing to bitcoin users was palpable. At BitGo, we were
 hoping to launch a MuSig taproot wallet concurrent with taproot activation; but
 the spec, test vectors, and reference implementation were incomplete. Instead,
 BitGo [launched][bitgo blog taproot] the first tapscript multisig wallet and made the [first tapscript
@@ -31,7 +31,7 @@ taproot spend.
 
 Naturally, there are some drawbacks to MuSig2. Two important ones revolve around
 [nonces](#nonces-deterministic-and-random). Unlike signers for plain ECDSA (elliptic curve digital signature
-algorithm) or [schnorr signatures][topic schnorr signatures], MuSig2 signers cannot consistently use
+algorithm) or [Schnorr signatures][topic schnorr signatures], MuSig2 signers cannot consistently use
 deterministic nonces. This inability makes it more difficult to ensure
 high-quality nonces and to ensure against nonce reuse. MuSig2 requires two
 rounds of communication in most cases. First nonce exchange, and then signing.
@@ -42,7 +42,7 @@ cautiously.
 
 MPC (multi-party compute) signing protocols are growing in popularity due to the
 aforementioned fee and privacy benefits. MuSig is a _simple_ multi-signature
-(n-of-n) protocol, made possible by schnorr signatures’ linearity. MuSig2 can be
+(n-of-n) protocol, made possible by Schnorr signatures’ linearity. MuSig2 can be
 explained in a 30-minute presentation, and the complete reference implementation
 is 461 textual lines of Python. [Threshold signature][topic threshold signature] (t-of-n) protocols, such as
 [FROST][], are significantly more complex, and even [2-party multi-signatures][] based
@@ -120,7 +120,7 @@ signing.
 ## The Specification Process
 
 Our experience with implementing MuSig2 at BitGo shows that companies and
-individuals working in the Bitcoin space should take the time to review and
+individuals working in the bitcoin space should take the time to review and
 contribute to the development of specifications that they intend to (or even
 hope to) implement. When we first reviewed the draft MuSig2 specification and
 started studying how best to integrate it into our signing systems, we
