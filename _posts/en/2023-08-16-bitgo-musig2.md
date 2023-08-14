@@ -1,8 +1,8 @@
 ---
 title: 'Field Report: Implementing MuSig2'
 permalink: /en/bitgo-musig2/
-name: 2022-08-16-bitgo-musig2
-slug: 2022-08-16-bitgo-musig2
+name: 2023-08-16-bitgo-musig2
+slug: 2023-08-16-bitgo-musig2
 type: posts
 layout: post
 lang: en
